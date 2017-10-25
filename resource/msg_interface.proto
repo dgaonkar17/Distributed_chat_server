@@ -1,0 +1,46 @@
+syntax = "proto2";
+option optimize_for = SPEED;
+option java_package = "routing";
+
+message Route {
+    enum Path {
+        NETWORK_DISCOVERY=0;
+        NETWORK_DISCOVERY_RESPONSE=1;
+        USER=2; //for future use
+        MESSAGE=3; //for future use
+        GROUP=4;//for future use
+        PING=5; //example
+//        MESSAGE=6; //example
+    }
+
+    // a node should not have a value though this is not enforced
+    required int64 id = 1;
+    required Path path = 2;
+
+//    optional string payload = 3;
+//    optional NetworkDiscoveryPacket = 4;
+//    optional ServerNodeDiscoveryResponse = 5;
+
+}
+
+
+message NetworkDiscoveryPacket{
+
+    enum Sender{
+        SERVER_NODE=0;
+        END_USER_CLIENT=1;
+    }
+
+    optional string group = 1; //If sender is a server node, then this field can contain its group id. If sender is end user client, then this field is not required.
+    required string nodeid =2; //node id of the sender
+    required Sender sender =3 [default = SERVER_NODE];
+
+}
+
+message ServerNodeDiscoveryResponse{
+
+    required string group = 1;
+    required string ip = 2;
+    required string nodeid = 3;
+
+}
